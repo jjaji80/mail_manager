@@ -9,7 +9,7 @@ require 'tmail'
 # ARGV[1] = from
 # ARGV[2] = to
 
-def readmail
+def readmail()
 	email = TMail::Mail.parse(STDIN.read)
 	body = <<EOT
 email_to: #{email.to}
