@@ -15,7 +15,7 @@ def readmail()
 email_to: #{email.to}
 email_from: #{email.from}
 
-#{mail.body.toutf8}
+#{email.body.toutf8}
 EOT
 return email.subject , body
 end
@@ -56,5 +56,5 @@ Net::SMTP.start(host, port) do |smtp|
 end
 end
 
-subject , body = readmail
+subject , body = readmail()
 sendmail(ARGV[1],ARGV[2],subject,body)
