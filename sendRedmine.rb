@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require "nkf"
 require "net/smtp"
 require 'rubygems'
