@@ -4,6 +4,7 @@ require "nkf"
 require "net/smtp"
 require 'rubygems'
 require 'tmail'
+require 'cgi'
 
 # ARGV[0] = author
 # ARGV[1] = from
@@ -14,6 +15,9 @@ def readmail()
 	body = <<EOT
 email_to: #{email.to}
 email_from: #{email.from}
+email_cc: #{email.cc}
+
+https://mail.google.com/mail/?ui=2&shva=1&zx=2ndwgns76rvo#advanced-search/subject=#{CGI.escape(email.subject.toutf8)}&subset=all
 
 #{email.body.toutf8}
 EOT
@@ -22,11 +26,11 @@ end
 
 def sendmail(from, to, subject, body, host = "localhost", port = 25)
 	subject_converted = subject
+	header = ""
 	if /管理番号:([0-9]+)/ =~ body 
 		subject_converted = "[#{$1}] " + subject_converted
-	end
-
-	body = <<EOT
+	else
+		header = <<EOT
 Project: gtd
 Tracker: タスク
 Priority: 高め
@@ -34,9 +38,13 @@ Category: inbox
 Assigned to: #{ARGV[0]}
 期日: #{Time.now.strftime("%Y-%m-%d")}
 予定工数: 0.5
+EOT
+	end
+
+	body = <<EOT
+#{header}
 
 #{body}
-https://mail.google.com/mail/?ui=2&shva=1&zx=2ndwgns76rvo#advanced-search/subject=#{subject}&subset=all&within=1d
 EOT
 
 body = <<EOT
